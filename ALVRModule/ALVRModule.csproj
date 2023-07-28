@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <None Remove="Assets\alvr.ico" />
+    <None Remove="Assets\alvr.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +26,9 @@
     <Resource Include="Assets\alvr.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <EmbeddedResource Include="Assets\alvr.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

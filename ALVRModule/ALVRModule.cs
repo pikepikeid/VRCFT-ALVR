@@ -91,7 +91,7 @@ namespace ALVRModule
         {
             ModuleInformation.Name = "ALVR";
 
-            var stream = GetType().Assembly.GetManifestResourceStream("ALVRModule.Assets.alvr.ico");
+            var stream = GetType().Assembly.GetManifestResourceStream("ALVRModule.Assets.alvr.png");
             ModuleInformation.StaticImages = stream != null ? new List<Stream> { stream } : ModuleInformation.StaticImages;
 
             socket.Client.ReceiveTimeout = 100;
