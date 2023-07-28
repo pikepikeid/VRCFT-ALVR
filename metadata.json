@@ -1,0 +1,16 @@
+{
+    "ModuleId": "699750bf-e217-4bd8-8039-3d5f97ee80ba",
+    "AuthorName": "zarik5",
+    "DllFileName": "ALVRModule.dll",
+    "Downloads": 0,
+    "DownloadUrl": "https://github.com/alvr-org/VRCFT-ALVR/releases/download/1.0.0/ALVRModule.zip",
+    "LastUpdated": "2023-07-28T18:33:04Z",
+    "ModuleDescription": "VRCFaceTracking module for ALVR support",
+    "ModuleName": "ALVR Module",
+    "ModulePageUrl": "https://github.com/alvr-org/VRCFT-ALVR",
+    "Rating": 0,
+    "Ratings": 0,
+    "RatingSum": 0,
+    "UsageInstructions": "Set `Eye and face tracking` to `VRCFaceTracking`. Reconnect the client if necessary.",
+    "Version": "1.0.0"
+}
