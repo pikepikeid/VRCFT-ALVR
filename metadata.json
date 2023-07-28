@@ -3,7 +3,7 @@
     "AuthorName": "zarik5",
     "DllFileName": "ALVRModule.dll",
     "Downloads": 0,
-    "DownloadUrl": "https://github.com/alvr-org/VRCFT-ALVR/releases/download/1.0.0/ALVRModule.zip",
+    "DownloadUrl": "https://github.com/alvr-org/VRCFT-ALVR/releases/download/v1.0.0/ALVRModule.zip",
     "LastUpdated": "2023-07-28T18:33:04Z",
     "ModuleDescription": "VRCFaceTracking module for ALVR support",
     "ModuleName": "ALVR Module",
