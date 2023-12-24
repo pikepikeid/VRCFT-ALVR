@@ -77,7 +77,15 @@ namespace ALVRModule
         UpperLidRaiserR = 60,
         UpperLipRaiserL = 61,
         UpperLipRaiserR = 62,
-        FaceFbMax = 63
+        TongueTipInterdental = 63,
+        TongueTipAlveolar = 64,
+        TongueFrontDorsalPalate = 65,
+        TongueMidDorsalPalate = 66,
+        TongueBackDorsalVelar = 67,
+        TongueOutFb = 68,
+        TongueRetreat = 69,
+        Face1FbMax = 63,
+        Face2FbMax = 70,
     }
 
     public class ALVRModule : ExtTrackingModule
@@ -171,9 +179,14 @@ namespace ALVRModule
             SetEyesQuatParams(array);
         }
 
-        private static void SetFaceFbParams(float[] p)
+        static void SetParam(float[] data, FaceFb input, UnifiedExpressions outputType)
         {
-            Debug.Assert(p.Length == (int)FaceFbMax);
+            UnifiedTracking.Data.Shapes[(int)outputType].Weight = data[(int)input];
+        }
+
+        private static void SetFace1FbParams(float[] p)
+        {
+            // Debug.Assert(p.Length == (int)Face1FbMax);
 
             var eye = UnifiedTracking.Data.Eye;
             var expr = UnifiedTracking.Data.Shapes;
@@ -181,10 +194,6 @@ namespace ALVRModule
             eye.Left.Openness = 1.0f - (float)Math.Max(0, Math.Min(1, p[(int)EyesClosedL] + p[(int)EyesClosedL] * p[(int)LidTightenerL]));
             eye.Right.Openness = 1.0f - (float)Math.Max(0, Math.Min(1, p[(int)EyesClosedR] + p[(int)EyesClosedR] * p[(int)LidTightenerR]));
 
-            static void SetParam(float[] data, FaceFb input, UnifiedExpressions outputType)
-            {
-                UnifiedTracking.Data.Shapes[(int)outputType].Weight = data[(int)input];
-            }
 
             // Eyelids
             SetParam(p, LidTightenerR, EyeSquintRight);
@@ -266,13 +275,20 @@ namespace ALVRModule
             SetParam(p, DimplerL, MouthDimpleLeft);
             SetParam(p, DimplerR, MouthDimpleRight);
 
-
             SetParam(p, ChinRaiserT, MouthRaiserUpper);
             SetParam(p, ChinRaiserB, MouthRaiserLower);
             SetParam(p, LipPressorR, MouthPressRight);
             SetParam(p, LipPressorL, MouthPressLeft);
             SetParam(p, LipTightenerR, MouthTightenerRight);
             SetParam(p, LipTightenerL, MouthTightenerLeft);
+        }
+
+        private static void SetFace2FbParams(float[] p) {
+            Debug.Assert(p.Length == (int)Face2FbMax);
+
+            SetFace1FbParams(p);
+
+            SetParam(p, TongueOutFb, TongueOut);
         }
 
         public override void Update()
@@ -297,13 +313,16 @@ namespace ALVRModule
                 switch (str)
                 {
                     case "EyesQuat":
-                        SetFaceFbParams(GetParams(packet, ref cursor, 8));
+                        SetEyesQuatParams(GetParams(packet, ref cursor, 8));
                         break;
                     case "CombQuat":
-                        SetFaceFbParams(GetParams(packet, ref cursor, 4));
+                        SetCombEyesQuatParams(GetParams(packet, ref cursor, 4));
                         break;
                     case "FaceFb\0\0":
-                        SetFaceFbParams(GetParams(packet, ref cursor, (int)FaceFbMax));
+                        SetFace1FbParams(GetParams(packet, ref cursor, (int)Face1FbMax));
+                        break;
+                    case "Face2Fb\0":
+                        SetFace2FbParams(GetParams(packet, ref cursor, (int)Face2FbMax));
                         break;
                     default:
                         Logger.LogError("[ALVR Module] Unrecognized prefix");
