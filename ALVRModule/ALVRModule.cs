@@ -283,7 +283,8 @@ namespace ALVRModule
             SetParam(p, LipTightenerL, MouthTightenerLeft);
         }
 
-        private static void SetFace2FbParams(float[] p) {
+        private static void SetFace2FbParams(float[] p)
+        {
             Debug.Assert(p.Length == (int)Face2FbMax);
 
             SetFace1FbParams(p);
@@ -305,9 +306,9 @@ namespace ALVRModule
             }
 
             int cursor = 0;
-            while (cursor + 8 <= packet.Length)
+            while (cursor < packet.Length)
             {
-                string str = Encoding.ASCII.GetString(packet, 0, 8);
+                string str = Encoding.ASCII.GetString(packet[cursor..(cursor + 8)], 0, 8);
                 cursor += 8;
 
                 switch (str)
@@ -325,7 +326,7 @@ namespace ALVRModule
                         SetFace2FbParams(GetParams(packet, ref cursor, (int)Face2FbMax));
                         break;
                     default:
-                        Logger.LogError("[ALVR Module] Unrecognized prefix");
+                        Logger.LogError($"[ALVR Module] Unrecognized prefix: {str}");
                         break;
                 }
             }
