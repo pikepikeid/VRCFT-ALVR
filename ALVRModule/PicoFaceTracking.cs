@@ -117,8 +117,25 @@ namespace ALVRModule
 
             w[CheekSquintRight] = p[CheekSquintR];
             w[CheekSquintLeft] = p[CheekSquintL];
-            w[CheekPuffRight] = p[CheekPuff];
-            w[CheekPuffLeft] = p[CheekPuff];
+            float mouthLeft = p[MouthLeft];
+            float mouthRight = p[MouthRight];
+            float diffThreshold = 0.1f;
+
+            if (mouthLeft > mouthRight + diffThreshold)
+            {
+                w[CheekPuffLeft] = p[CheekPuff];
+                w[CheekPuffRight] = p[CheekPuff] + p[MouthLeft];
+            }
+            else if (mouthRight > mouthLeft + diffThreshold)
+            {
+                w[CheekPuffLeft] = p[CheekPuff] + p[MouthRight];
+                w[CheekPuffRight] = p[CheekPuff];
+            }
+            else
+            {
+                w[CheekPuffLeft] = p[CheekPuff];
+                w[CheekPuffRight] = p[CheekPuff];
+            }
 
             #endregion
 
@@ -139,10 +156,14 @@ namespace ALVRModule
             w[LipSuckLowerRight] = p[MouthRollLower];
             w[LipSuckLowerLeft] = p[MouthRollLower];
 
-            w[LipFunnelUpperRight] = p[MouthFunnel];
-            w[LipFunnelUpperLeft] = p[MouthFunnel];
-            w[LipFunnelLowerRight] = p[MouthFunnel];
-            w[LipFunnelLowerLeft] = p[MouthFunnel];
+            var isFunnelRight = p[MouthPucker] > 0.3f && p[MouthPressR] < 0.2f;
+            var isFunnelLeft = p[MouthPucker] > 0.3f && p[MouthPressL] < 0.2f;
+            var mouthFunnelFixed = p[MouthPucker];
+
+            w[LipFunnelUpperRight] = isFunnelRight ? mouthFunnelFixed : p[MouthFunnel];
+            w[LipFunnelUpperLeft] = isFunnelLeft ? mouthFunnelFixed : p[MouthFunnel];
+            w[LipFunnelLowerRight] = isFunnelRight ? mouthFunnelFixed : p[MouthFunnel];
+            w[LipFunnelLowerLeft] = isFunnelLeft ? mouthFunnelFixed : p[MouthFunnel];
 
             w[LipPuckerUpperRight] = p[MouthPucker];
             w[LipPuckerUpperLeft] = p[MouthPucker];
@@ -165,13 +186,29 @@ namespace ALVRModule
             w[MouthLowerRight] = p[MouthRight];
             w[MouthLowerLeft] = p[MouthLeft];
 
-            w[MouthCornerPullRight] = p[MouthSmileR];
-            w[MouthCornerPullLeft] = p[MouthSmileL];
-            w[MouthCornerSlantRight] = p[MouthSmileR];
-            w[MouthCornerSlantLeft] = p[MouthSmileL];
+            float smileScale = 2.0f;
 
-            w[MouthFrownRight] = p[MouthFrownR];
-            w[MouthFrownLeft] = p[MouthFrownL];
+            var mouthSmileLeft = (p[MouthSmileL] - (p[JawShapeOpen] > 0.1f ? p[MouthRollLower] : 0f)) * smileScale;
+            w[MouthCornerPullLeft] = p[MouthRollLower] < 0.25f ? mouthSmileLeft : 0f;
+            w[MouthCornerSlantLeft] = p[MouthRollLower] < 0.25f ? mouthSmileLeft - (p[MouthRollLower] * smileScale) : 0f;
+
+            var mouthSmileRight = (p[MouthSmileR] - (p[JawShapeOpen] > 0.1f ? p[MouthRollLower] : 0f)) * smileScale;
+            w[MouthCornerPullRight] = p[MouthRollLower] < 0.25f ? mouthSmileRight : 0f;
+            w[MouthCornerSlantRight] = p[MouthRollLower] < 0.25f ? mouthSmileRight - (p[MouthRollLower] * smileScale) : 0f;
+
+            var mouthFrownRight = p[MouthFrownR];
+            w[MouthFrownRight] = p[JawShapeOpen] > 0.1f
+                ? mouthFrownRight / 2f
+                : p[MouthRollLower] > 0.25f
+                    ? mouthFrownRight * 2.5f + p[MouthRollLower]
+                    : mouthFrownRight;
+            var mouthFrownLeft = p[MouthFrownL];
+            w[MouthFrownLeft] = p[JawShapeOpen] > 0.1f
+                ? mouthFrownLeft / 2f
+                : p[MouthRollLower] > 0.25f
+                    ? mouthFrownLeft * 2.5f + p[MouthRollLower]
+                    : mouthFrownLeft;
+
             w[MouthStretchRight] = p[MouthStretchR];
             w[MouthStretchLeft] = p[MouthStretchL];
 
@@ -187,7 +224,7 @@ namespace ALVRModule
 
             #region Tongue Expressions
 
-            w[TongueOut] = p[TongueShapeOut];
+            w[TongueOut] = p[TongueShapeOut] > 0.9f ? p[TongueShapeOut] : 0f;
 
             #endregion
         }
