@@ -1,3 +1,8 @@
+# This is an unofficial version.
+Please note that functionality is not guaranteed. Proceed at your own discretion.
+
+これは非公式版です。自己責任でお使いください。
+
 # VRCFT-ALVR
 
 VRCFaceTracking module for ALVR
