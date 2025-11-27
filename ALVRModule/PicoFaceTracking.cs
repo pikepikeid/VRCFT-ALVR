@@ -170,13 +170,13 @@ namespace ALVRModule
             w[LipPuckerLowerRight] = p[MouthPucker];
             w[LipPuckerLowerLeft] = p[MouthPucker];
 
-            w[MouthUpperUpRight] = Math.Max(0, p[MouthUpperUpR] - p[NoseSneerR]);
-            w[MouthUpperUpLeft] = Math.Max(0, p[MouthUpperUpL] - p[NoseSneerL]);
-            w[MouthUpperDeepenRight] = Math.Max(0, p[MouthUpperUpR] - p[NoseSneerR]);
-            w[MouthUpperDeepenLeft] = Math.Max(0, p[MouthUpperUpL] - p[NoseSneerL]);
+            w[MouthUpperUpRight] = (p[MouthPressR] < 0.1f ? p[MouthUpperUpR] / 0.8f : 0f);
+            w[MouthUpperUpLeft] = (p[MouthPressL] < 0.1f ? p[MouthUpperUpL] / 0.8f : 0f);
+            w[MouthUpperDeepenRight] = (p[MouthPressR] < 0.1f ? p[MouthUpperUpR] : 0f);
+            w[MouthUpperDeepenLeft] = (p[MouthPressL] < 0.1f ? p[MouthUpperUpL] : 0f);
 
-            w[NoseSneerRight] = p[NoseSneerR];
-            w[NoseSneerLeft] = p[NoseSneerL];
+            w[NoseSneerRight] = (p[NoseSneerR] > 0.6f ? p[NoseSneerR] : 0f);
+            w[NoseSneerLeft] = (p[NoseSneerL] > 0.6f ? p[NoseSneerL] : 0f);
 
             w[MouthLowerDownRight] = p[MouthLowerDownR];
             w[MouthLowerDownLeft] = p[MouthLowerDownL];
@@ -185,16 +185,14 @@ namespace ALVRModule
             w[MouthUpperLeft] = p[MouthLeft];
             w[MouthLowerRight] = p[MouthRight];
             w[MouthLowerLeft] = p[MouthLeft];
-
-            float smileScale = 2.0f;
-
-            var mouthSmileLeft = (p[MouthSmileL] - (p[JawShapeOpen] > 0.1f ? p[MouthRollLower] : 0f)) * smileScale;
+            
+            var mouthSmileLeft = (p[MouthSmileL] / 0.5f) - (p[JawShapeOpen] > 0.1f ? p[MouthRollLower] / 0.5f : 0f);
             w[MouthCornerPullLeft] = p[MouthRollLower] < 0.25f ? mouthSmileLeft : 0f;
-            w[MouthCornerSlantLeft] = p[MouthRollLower] < 0.25f ? mouthSmileLeft - (p[MouthRollLower] * smileScale) : 0f;
+            w[MouthCornerSlantLeft] = p[MouthRollLower] < 0.25f ? mouthSmileLeft - (p[MouthRollLower] / 0.5f) : 0f;
 
-            var mouthSmileRight = (p[MouthSmileR] - (p[JawShapeOpen] > 0.1f ? p[MouthRollLower] : 0f)) * smileScale;
+            var mouthSmileRight = (p[MouthSmileL] / 0.5f) - (p[JawShapeOpen] > 0.1f ? p[MouthRollLower] / 0.5f : 0f);
             w[MouthCornerPullRight] = p[MouthRollLower] < 0.25f ? mouthSmileRight : 0f;
-            w[MouthCornerSlantRight] = p[MouthRollLower] < 0.25f ? mouthSmileRight - (p[MouthRollLower] * smileScale) : 0f;
+            w[MouthCornerSlantRight] = p[MouthRollLower] < 0.25f ? mouthSmileRight - (p[MouthRollLower] / 0.5f) : 0f;
 
             var mouthFrownRight = p[MouthFrownR];
             w[MouthFrownRight] = p[JawShapeOpen] > 0.1f
